@@ -1,7 +1,7 @@
 public class Ghost extends Entity {
     private int mode; //0-scatter, 1-chase, 2-frightened, 3-eaten
-    private tar_xpos;
-    private tar_ypos;
+    private int tar_xpos;
+    private int tar_ypos;
     
     public void update_tar_chase(){ }
 }
