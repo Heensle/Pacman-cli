@@ -4,29 +4,53 @@ public class Ghost extends Entity {
     private int tar_ypos;
     
     public void update_tar_chase(){ }
+    
+    public void set_mode(int mode){
+        this.mode = mode;
+    }
+    
+    public void set_tar_xpos(int tar_xpos){
+        this.tar_xpos = tar_xpos;
+    }
+    
+    public void set_tar_ypos(int tar_ypos){
+        this.tar_ypos = tar_ypos;
+    }
+    
+    public int get_mode(){
+        return mode;
+    }
+    
+    public int get_tar_xpos(){
+        return tar_xpos;
+    }
+    
+    public int get_tar_ypos(){
+        return tar_ypos;
+    }
 }
 
 class Blinky extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
-        tar_xpos = pellet_eater.get_xpos();
-        tar_ypos = pellet_eater.get_ypos();
+        set_tar_xpos(pellet_eater.get_xpos());
+        set_tar_ypos(pellet_eater.get_ypos());
     }
 }
 
 class Pinky extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
-        tar_xpos = pellet_eater.get_xpos();
-        tar_ypos = pellet_eater.get_ypos();
+        set_tar_xpos(pellet_eater.get_xpos());
+        set_tar_ypos(pellet_eater.get_ypos());
         if(pellet_eater.get_dir() == 00){
-            tar_xpos += 4;
+            set_tar_xpos(get_tar_xpos() + 4);
         } else if (pellet_eater.get_dir() == 01){
-            tar_xpos -= 4;
+            set_tar_xpos(get_tar_xpos() - 4);
         } else if (pellet_eater.get_dir() == 10){
-            tar_ypos += 4;
+            set_tar_ypos(get_tar_xpos() + 4);
         } else if (pellet_eater.get_dir() == 11){
-            tar_ypos -= 4;
+            set_tar_ypos(get_tar_xpos() - 4);
         }
     }
 }
@@ -41,13 +65,13 @@ class Inky extends Ghost{
 class Clyde extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
-        if(Math.pow((pellet_eater.get_xpos() - xpos), 2) 
-            + Math.pow((pellet_eater.get_ypos() - ypos), 2) >= 8){
-            tar_xpos = pellet_eater.get_xpos();
-            tar_ypos = pellet_eater.get_ypos();
+        if(Math.pow((pellet_eater.get_xpos() - get_xpos()), 2) 
+            + Math.pow((pellet_eater.get_ypos() - get_ypos()), 2) >= 8){
+            set_tar_xpos(pellet_eater.get_xpos());
+            set_tar_ypos(pellet_eater.get_ypos());
         } else {
-            tar_xpos = 0; 
-            tar_ypos = 0;
+            set_tar_xpos(0); 
+            set_tar_ypos(0);
         }
     }
 }
