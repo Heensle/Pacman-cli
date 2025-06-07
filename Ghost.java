@@ -33,6 +33,7 @@ public class Ghost extends Entity {
 class Blinky extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
+        //sets target to pacman
         set_tar_xpos(pellet_eater.get_xpos());
         set_tar_ypos(pellet_eater.get_ypos());
     }
@@ -41,6 +42,7 @@ class Blinky extends Ghost{
 class Pinky extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
+        //sets target to 2 in front of pacman
         set_tar_xpos(pellet_eater.get_xpos());
         set_tar_ypos(pellet_eater.get_ypos());
         if(pellet_eater.get_dir() == 00){
@@ -48,30 +50,38 @@ class Pinky extends Ghost{
         } else if (pellet_eater.get_dir() == 01){
             set_tar_xpos(get_tar_xpos() - 4);
         } else if (pellet_eater.get_dir() == 10){
-            set_tar_ypos(get_tar_xpos() + 4);
+            set_tar_ypos(get_tar_ypos() - 4);
         } else if (pellet_eater.get_dir() == 11){
-            set_tar_ypos(get_tar_xpos() - 4);
+            set_tar_ypos(get_tar_ypos() + 4);
         }
     }
 }
 
 class Inky extends Ghost{
     
-    public void update_tar_chase(Pacman pellet_eater){
+    public void update_tar_chase(Pacman pellet_eater, Blinky reddie){
+        //sets target to end of 180degree rotation of vector btwn pacman & blinky
+        int PMxpos = pellet_eater.get_xpos();
+        int PMypos = pellet_eater.get_ypos();
+        int Bxpos = reddie.get_xpos();
+        int Bypos = reddie.get_ypos();
         
+        set_tar_xpos(PMxpos - (PMxpos - Bxpos));
+        set_tar_ypos(PMypos - (PMypos - Bypos));
     }
 }
 
 class Clyde extends Ghost{
     
     public void update_tar_chase(Pacman pellet_eater){
+        //sets target to pacman when outside of 16un, otherwise sets to bottom left corner
         if(Math.pow((pellet_eater.get_xpos() - get_xpos()), 2) 
-            + Math.pow((pellet_eater.get_ypos() - get_ypos()), 2) >= 8){
+            + Math.pow((pellet_eater.get_ypos() - get_ypos()), 2) >= 16){
             set_tar_xpos(pellet_eater.get_xpos());
             set_tar_ypos(pellet_eater.get_ypos());
         } else {
             set_tar_xpos(0); 
-            set_tar_ypos(0);
+            set_tar_ypos(30);
         }
     }
 }
