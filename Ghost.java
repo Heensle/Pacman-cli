@@ -5,6 +5,8 @@ public class Ghost extends Entity {
     
     public void update_tar_chase(){ }
     
+    public void update_tar_scatter(){ }
+    
     public void set_mode(int mode){
         this.mode = mode;
     }
@@ -37,6 +39,12 @@ class Blinky extends Ghost{
         set_tar_xpos(pellet_eater.get_xpos());
         set_tar_ypos(pellet_eater.get_ypos());
     }
+    
+    public void update_tar_scatter(){
+        //sets target to top right
+        set_tar_xpos(54);
+        set_tar_ypos(0);
+    }
 }
 
 class Pinky extends Ghost{
@@ -55,6 +63,12 @@ class Pinky extends Ghost{
             set_tar_ypos(get_tar_ypos() + 4);
         }
     }
+    
+    public void update_tar_scatter(){
+        //sets target to top left
+        set_tar_xpos(0);
+        set_tar_ypos(0);
+    }
 }
 
 class Inky extends Ghost{
@@ -68,6 +82,11 @@ class Inky extends Ghost{
         
         set_tar_xpos(PMxpos - (PMxpos - Bxpos));
         set_tar_ypos(PMypos - (PMypos - Bypos));
+    }
+    
+    public void update_tar_scatter(){
+        set_tar_xpos(54);
+        set_tar_ypos(30);
     }
 }
 
@@ -83,5 +102,10 @@ class Clyde extends Ghost{
             set_tar_xpos(0); 
             set_tar_ypos(30);
         }
+    }
+    
+    public void update_tar_scatter(){
+        set_tar_xpos(0); 
+        set_tar_ypos(30);
     }
 }
