@@ -1,8 +1,6 @@
 public class Board {
     private char[][] map;
     
-    
-    
     public Board(){
         //creates board set for level 1
         
@@ -239,5 +237,13 @@ public class Board {
             }
             System.out.print("\n");
         }
+    }
+    
+    public void edit_board(int xpos, int ypos, char change){
+        map[ypos][xpos] = change;
+    }
+    
+    public char board_at(int xpos, int ypos){
+        return map[ypos][xpos];
     }
 }
