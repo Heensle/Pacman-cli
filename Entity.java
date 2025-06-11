@@ -1,5 +1,5 @@
 public class Entity {
-    private Vector vector;
+    private Vector vector; //position & direction facing
     private char appearance;
     private String color;
     
@@ -10,6 +10,7 @@ public class Entity {
     }
     
     public void update_pos(){
+        //advances 1 place in direciton facing
         if(vector.get_dir() == 10){
             vector.set_ypos(vector.get_ypos() - 1);
         } else if (vector.get_dir() == 11){
@@ -20,16 +21,16 @@ public class Entity {
             vector.set_xpos(vector.get_xpos() - 1);
         }
         
-        if(vector.get_xpos() < 0){
+        if(vector.get_xpos() < 0){//allows for wrapping on left
             vector.set_xpos(53);
         }
-        if(vector.get_xpos() > 53){
+        if(vector.get_xpos() > 53){//and right sides of map
             vector.set_xpos(0);
         }
     }
     
     public double distance(OrderedPair destination){
-        return vector.distance(destination);
+        return vector.distance(destination); //calculates distance between two points
     }
     
     public void set_xpos(int xpos){
