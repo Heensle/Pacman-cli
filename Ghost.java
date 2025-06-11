@@ -27,6 +27,7 @@ public class Ghost extends Entity {
             aval_moves[2] = 1000.0;
         }
         
+        //cant move anywhere illegal
         if(board.can_move_ghost_ed(this.get_xpos(), this.get_ypos(), 00, this.get_mode()).equals("no")){
             aval_moves[0] = 1000.0;
         }
@@ -40,6 +41,7 @@ public class Ghost extends Entity {
             aval_moves[3] = 1000.0;
         }
         
+        //asigns distance to avaliable moves
         if(aval_moves[0] != 1000.0){
             aval_moves[0] = OrderedPair.distance(this.get_xpos() + 1, this.get_ypos(), tar.get_xpos(), tar.get_ypos());
         } 
@@ -53,7 +55,7 @@ public class Ghost extends Entity {
             aval_moves[3] = OrderedPair.distance(this.get_xpos(), this.get_ypos() - 1, tar.get_xpos(), tar.get_ypos());
         }
         
-        double min = 1000.0;
+        double min = 1000.0; //finds move that puts ghost closest to target
         int min_index = -1;
         
         for(int i = 0; i < 4; i++){
@@ -94,7 +96,7 @@ public class Ghost extends Entity {
         Timing.set_frightened_start();
     }
     
-    public void fix_overflow(){
+    public void fix_overflow(){ //keeps target from leaving map
         if(tar.get_xpos() > 54){
             tar.set_xpos(54);
         }
@@ -110,7 +112,7 @@ public class Ghost extends Entity {
     }
     
     public void set_mode(int mode){
-        if(mode == 3){
+        if(mode == 3){ // if eaten
             super.set_appearance('∞');
             set_tar_xpos(27);
             set_tar_ypos(13);
@@ -180,7 +182,7 @@ class Pinky extends Ghost{
     }
     
     public void update_tar_chase(Pacman pacman){
-        //sets target to 2 in front of pacman
+        //sets target to 4 in front of pacman
         set_tar_xpos(pacman.get_xpos());
         set_tar_ypos(pacman.get_ypos());
         if(pacman.get_dir() == 00){
@@ -225,13 +227,13 @@ class Inky extends Ghost{
         int Bxpos = blinky.get_xpos();
         int Bypos = blinky.get_ypos();
         
-        set_tar_xpos(PMxpos - (PMxpos - Bxpos));
-        set_tar_ypos(PMypos - (PMypos - Bypos));
+        set_tar_xpos(PMxpos + (PMxpos - Bxpos));
+        set_tar_ypos(PMypos + (PMypos - Bypos));
         
         fix_overflow();
     }
     
-    public void update_tar_scatter(){
+    public void update_tar_scatter()//sets target to bottom right
         set_tar_xpos(54);
         set_tar_ypos(30);
     }
@@ -254,7 +256,7 @@ class Clyde extends Ghost{
     
     public void update_tar_chase(Pacman pacman){
         //sets target to pacman when outside of 16un, otherwise sets to bottom left corner
-        if(distance(get_tar()) >= 16){
+        if(OrderPair.distance(get_xpos(), get_ypos(), pacman.get_xpos(), pacman.get_ypos()) >= 16){
             set_tar_xpos(pacman.get_xpos());
             set_tar_ypos(pacman.get_ypos());
         } else {
@@ -264,6 +266,7 @@ class Clyde extends Ghost{
     }
     
     public void update_tar_scatter(){
+        //sets target to bottom left
         set_tar_xpos(0); 
         set_tar_ypos(30);
     }
