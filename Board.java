@@ -6,6 +6,11 @@ public class Board {
 
     //creates board set for level 1
     //x's distinguish increased entrance gaps
+    //p is for ghosts to enter ghost house
+    // ● are pellets
+    //◍ are power pellets
+    //⬤ is pacman
+    
     public Board(){
         
         map = new char[31][55];
@@ -201,6 +206,9 @@ public class Board {
     }
     
     public String can_move(int xpos, int ypos, int dir){
+        //checks dir facing to see if blocked
+        //2 horizontal and 1 vertical because of double horizontal spacing
+        //diagonal moves possible to make it easier to turn up and down
         if(dir == 00){
             if(xpos + 2 > 54){
                 return "right";
@@ -218,29 +226,23 @@ public class Board {
             if(map[ypos][xpos - 2] == ' ' 
                 || map[ypos][xpos - 2] == '●' 
                 || map[ypos][xpos - 2] == '◍'
-                || map[ypos][xpos - 2] == 'x'
-                ){
+                || map[ypos][xpos - 2] == 'x'){
                 return "left";
             }
         } else if (dir == 10){
             if(map[ypos - 1][xpos] == ' ' 
                 || map[ypos - 1][xpos] == '●' 
-                || map[ypos - 1][xpos] == '◍'
-                ){
+                || map[ypos - 1][xpos] == '◍'){
                 return "up";
             }
             if(map[ypos - 1][xpos] == 'x'){
                 if(map[ypos - 1][xpos - 1] == ' ' 
                 || map[ypos - 1][xpos - 1] == '●' 
-                || map[ypos - 1][xpos - 1] == '◍'
-                //|| map[ypos - 1][xpos - 1] == '/'
-                ){
+                || map[ypos - 1][xpos - 1] == '◍'){
                     return "upleft";
                 } else if(map[ypos - 1][xpos + 1] == ' ' 
                 || map[ypos - 1][xpos + 1] == '●' 
-                || map[ypos - 1][xpos + 1] == '◍'
-                //|| map[ypos - 1][xpos + 1] == '/'
-                ){
+                || map[ypos - 1][xpos + 1] == '◍'){
                     return "upright";
                 }
             }
@@ -248,22 +250,17 @@ public class Board {
             if(map[ypos + 1][xpos] == ' ' 
                 || map[ypos + 1][xpos] == '●' 
                 || map[ypos + 1][xpos] == '◍'
-                //|| map[ypos + 1][xpos] == '/'
                 ){
                 return "down";
             }
             if(map[ypos + 1][xpos] == 'x'){
                 if(map[ypos + 1][xpos - 1] == ' ' 
                 || map[ypos + 1][xpos - 1] == '●' 
-                || map[ypos + 1][xpos - 1] == '◍'
-                //|| map[ypos + 1][xpos - 1] == '/'
-                ){
+                || map[ypos + 1][xpos - 1] == '◍'){
                     return "downleft";
                 } else if(map[ypos + 1][xpos + 1] == ' ' 
                 || map[ypos + 1][xpos + 1] == '●' 
-                || map[ypos + 1][xpos + 1] == '◍'
-                //|| map[ypos + 1][xpos + 1] == '/'
-                ){
+                || map[ypos + 1][xpos + 1] == '◍'){
                     return "downright";
                 }
             }
@@ -272,6 +269,9 @@ public class Board {
     }
     
     public String can_move_ghost_ed(int xpos, int ypos, int dir, int mode){
+        //movement check for ghosts 
+        //(lets move into pacman, gets rid of diagonal movement, 
+        //lets move through 'p' under certain circumstances)
         if(dir == 00){
             if(xpos + 2 > 54){
                 return "right";
