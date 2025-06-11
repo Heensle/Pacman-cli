@@ -21,18 +21,19 @@ public class Graphics {
     }
     
     public static void move_cursor_print(Entity thing) {
-    // move cursor to (row, col) and print the text
+    // move cursor to xpos ypos of entity and prints appearance
     terminal.writer().print(String.format("\u001B[%d;%dH%s", thing.get_ypos() + 1, thing.get_xpos() + 1, thing.get_color() + thing.get_appearance()));
     terminal.flush();
     }
     
-    public static void move_cursor_print(int x_pos, int y_pos, String text) {
-    // move cursor to (row, col) and print the text
-    terminal.writer().print(String.format("\u001B[%d;%dH%s", y_pos + 1, x_pos + 1, text));
+    public static void move_cursor_print(int xpos, int ypos, String text) {
+    // move cursor to xpos ypos and print the text
+    terminal.writer().print(String.format("\u001B[%d;%dH%s", ypos + 1, xpos + 1, text));
     terminal.flush();
     }
     
     public static void print_board(Board map){ 
+        //prints board, one time use
         for(int i = 0; i < 31; i++){
             for(int j = 0; j < 55; j++){
                 if(map.board_at(j, i) == 'x' || map.board_at(j, i) == '/'){
@@ -55,6 +56,7 @@ public class Graphics {
     }
     
     public static void flush(){
+        //flushes ostream
         terminal.flush();
     }
     
@@ -62,7 +64,7 @@ public class Graphics {
         try {
             terminal.close();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to initialize terminal", e);
+            throw new RuntimeException("Failed to close terminal", e);
         }
     }
     
