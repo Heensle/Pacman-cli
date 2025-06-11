@@ -233,7 +233,7 @@ class Inky extends Ghost{
         fix_overflow();
     }
     
-    public void update_tar_scatter()//sets target to bottom right
+    public void update_tar_scatter(){//sets target to bottom right
         set_tar_xpos(54);
         set_tar_ypos(30);
     }
@@ -256,7 +256,7 @@ class Clyde extends Ghost{
     
     public void update_tar_chase(Pacman pacman){
         //sets target to pacman when outside of 16un, otherwise sets to bottom left corner
-        if(OrderPair.distance(get_xpos(), get_ypos(), pacman.get_xpos(), pacman.get_ypos()) >= 16){
+        if(OrderedPair.distance(get_xpos(), get_ypos(), pacman.get_xpos(), pacman.get_ypos()) >= 16){
             set_tar_xpos(pacman.get_xpos());
             set_tar_ypos(pacman.get_ypos());
         } else {
