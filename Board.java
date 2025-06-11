@@ -1,6 +1,9 @@
 public class Board {
     private char[][] map;
     
+    int score = 0;
+    int lives = 2;
+
     //creates board set for level 1
     //x's distinguish increased entrance gaps
     public Board(){
@@ -80,38 +83,38 @@ public class Board {
         for(int i = 0; i < 55; i++){
             map[11][i] = row.charAt(i);
         }
-                                           
-        row = "          ║ ● │ │x  x╔════▬▬▬════╗x  x│ │ ● ║          ";
+                                          
+        row = "          ║ ● │ │x //╔════▬p▬════╗// x│ │ ● ║          ";
         
         for(int i = 0; i < 55; i++){
             map[12][i] = row.charAt(i);
         }
                                  
-        row = "══════════╝x●x└─┘x  x║           ║x  x└─┘x●x╚══════════";
+        row = "══════════╝x●x└─┘x //║    x x    ║// x└─┘x●x╚══════════";
         
         for(int i = 0; i < 55; i++){
             map[13][i] = row.charAt(i);
         }
-        
-        row = "            ●        ║ ᗣ ᗣ  ᗣ  ᗣ ║        ●            ";
+
+        row = "            ●       /║           ║/       ●            ";
                                                  
         for(int i = 0; i < 55; i++){
             map[14][i] = row.charAt(i);
         }
         
-        row = "══════════╗x●x┌─┐x  x║           ║x  x┌─┐x●x╔══════════";
+        row = "══════════╗x●x┌─┐x //║           ║// x┌─┐x●x╔══════════";
         
         for(int i = 0; i < 55; i++){
             map[15][i] = row.charAt(i);
         }
         
-        row = "          ║ ● │ │x  x╚═══════════╝x  x│ │ ● ║          ";
+        row = "          ║ ● │ │x //╚═══════════╝// x│ │ ● ║          ";
         
         for(int i = 0; i < 55; i++){
             map[16][i] = row.charAt(i);
         }
                                  
-        row = "          ║ ● │ │x                   x│ │ ● ║          ";
+        row = "          ║ ● │ │                     │ │ ● ║          ";
         
         for(int i = 0; i < 55; i++){
             map[17][i] = row.charAt(i);
@@ -197,64 +200,116 @@ public class Board {
         
     }
     
-    //returns true if pacman can continue to move in a given direction
-    public boolean can_move(Pacman pellet_eater){
-        int PMxpos = pellet_eater.get_xpos();
-        int PMypos = pellet_eater.get_ypos();
-        if(pellet_eater.get_dir() == 10){
-            PMypos--;
-        } else if (pellet_eater.get_dir() == 11){
-            PMypos++;
-        } else if (pellet_eater.get_dir() == 00){
-            PMxpos+=2;
-        } else if (pellet_eater.get_dir() == 01){
-            PMxpos-=2;
-        }
-        if(PMxpos < 0 || PMxpos > 54){
-            return true;
-        }
-        if(map[PMypos][PMxpos] != ' ' && map[PMypos][PMxpos] != '●' && map[PMypos][PMxpos] != '◍'){
-            return false;
-        }
-        
-        return true;
-    }
-    
-    //returns true if pacman can move up/down modified for 
-    //increased movement (3 wide entrances instead of 1 wide).
-    public boolean can_move_up_down(Pacman pellet_eater){
-        int PMxpos = pellet_eater.get_xpos();
-        int PMypos = pellet_eater.get_ypos();
-        if(pellet_eater.get_dir() == 10){
-            PMypos--;
-        } else if (pellet_eater.get_dir() == 11){
-            PMypos++;
-        }
-        if(map[PMypos][PMxpos] != 'x'){
-            return false;
-        }
-        
-        return true;
-    }
-    
-    public void print_board(){ 
-        for(int i = 0; i < 31; i++){
-            for(int j = 0; j < 55; j++){
-                if(map[i][j] == 'x'){
-                    System.out.print(' ');   
-                } else if (map[i][j] == '⬤'){
-                    System.out.print("\u001b[33;1m⬤\u001b[38;5;18m");
-                } else if (map[i][j] == '●'){
-                    System.out.print("\u001b[0m●");
-                } /*else if (map[i][j] == '✰'){
-                    System.out.print("\u001b[0m✰");
-                } */else {
-                    System.out.print("\u001b[38;5;18m" + map[i][j]);
+    public String can_move(int xpos, int ypos, int dir){
+        if(dir == 00){
+            if(xpos + 2 > 54){
+                return "right";
+            }
+            if(map[ypos][xpos + 2] == ' ' 
+                || map[ypos][xpos + 2] == '●' 
+                || map[ypos][xpos + 2] == '◍'
+                || map[ypos][xpos + 2] == 'x'){
+                return "right";
+            }
+        } else if (dir == 01){
+            if(xpos - 2 < 0){
+                return "left";
+            }
+            if(map[ypos][xpos - 2] == ' ' 
+                || map[ypos][xpos - 2] == '●' 
+                || map[ypos][xpos - 2] == '◍'
+                || map[ypos][xpos - 2] == 'x'
+                ){
+                return "left";
+            }
+        } else if (dir == 10){
+            if(map[ypos - 1][xpos] == ' ' 
+                || map[ypos - 1][xpos] == '●' 
+                || map[ypos - 1][xpos] == '◍'
+                ){
+                return "up";
+            }
+            if(map[ypos - 1][xpos] == 'x'){
+                if(map[ypos - 1][xpos - 1] == ' ' 
+                || map[ypos - 1][xpos - 1] == '●' 
+                || map[ypos - 1][xpos - 1] == '◍'
+                //|| map[ypos - 1][xpos - 1] == '/'
+                ){
+                    return "upleft";
+                } else if(map[ypos - 1][xpos + 1] == ' ' 
+                || map[ypos - 1][xpos + 1] == '●' 
+                || map[ypos - 1][xpos + 1] == '◍'
+                //|| map[ypos - 1][xpos + 1] == '/'
+                ){
+                    return "upright";
                 }
             }
-            System.out.print("\n");
+        } else if (dir == 11){
+            if(map[ypos + 1][xpos] == ' ' 
+                || map[ypos + 1][xpos] == '●' 
+                || map[ypos + 1][xpos] == '◍'
+                //|| map[ypos + 1][xpos] == '/'
+                ){
+                return "down";
+            }
+            if(map[ypos + 1][xpos] == 'x'){
+                if(map[ypos + 1][xpos - 1] == ' ' 
+                || map[ypos + 1][xpos - 1] == '●' 
+                || map[ypos + 1][xpos - 1] == '◍'
+                //|| map[ypos + 1][xpos - 1] == '/'
+                ){
+                    return "downleft";
+                } else if(map[ypos + 1][xpos + 1] == ' ' 
+                || map[ypos + 1][xpos + 1] == '●' 
+                || map[ypos + 1][xpos + 1] == '◍'
+                //|| map[ypos + 1][xpos + 1] == '/'
+                ){
+                    return "downright";
+                }
+            }
         }
-        System.out.print("\u001b[0m");
+        return "no";
+    }
+    
+    public String can_move_ghost_ed(int xpos, int ypos, int dir, int mode){
+        if(dir == 00){
+            if(xpos + 2 > 54){
+                return "right";
+            }
+            if(map[ypos][xpos + 2] == ' ' 
+                || map[ypos][xpos + 2] == '●' 
+                || map[ypos][xpos + 2] == '◍'
+                || map[ypos][xpos + 2] == '⬤'){
+                return "right";
+            }
+        } else if (dir == 01){
+            if(xpos - 2 < 0){
+                return "left";
+            }
+            if(map[ypos][xpos - 2] == ' ' 
+                || map[ypos][xpos - 2] == '●' 
+                || map[ypos][xpos - 2] == '◍'
+                || map[ypos][xpos - 2] == '⬤'){
+                return "left";
+            }
+        } else if (dir == 10){
+            if(map[ypos - 1][xpos] == ' ' 
+                || map[ypos - 1][xpos] == '●' 
+                || map[ypos - 1][xpos] == '◍'
+                || map[ypos - 1][xpos] == '⬤'
+                || map[ypos - 1][xpos] == 'p'){
+                return "up";
+            }
+        } else if (dir == 11){
+            if(map[ypos + 1][xpos] == ' ' 
+                || map[ypos + 1][xpos] == '●' 
+                || map[ypos + 1][xpos] == '◍'
+                || map[ypos + 1][xpos] == '⬤'
+                || (map[ypos + 1][xpos] == 'p' && mode == 3)){
+                return "down";
+            }
+        }
+        return "no";
     }
     
     public void edit_board(int xpos, int ypos, char change){
@@ -263,5 +318,21 @@ public class Board {
     
     public char board_at(int xpos, int ypos){
         return map[ypos][xpos];
+    }
+    
+    public void set_score(int score){
+        this.score = score;
+    }
+    
+    public void set_lives(int lives){
+        this.lives = lives;
+    }
+    
+    public int get_score(){
+        return score;
+    }
+    
+    public int get_lives(){
+        return lives;
     }
 }
