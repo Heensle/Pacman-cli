@@ -1,37 +1,72 @@
 import java.util.ArrayList;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import java.io.IOException;
 
 public class Graphics {
-    int score;
-    int lives;
-    ArrayList<Character> fruits;
     
-    public Graphics(){
-        score = 0;
-        lives = 2;
-        ArrayList<Character> fruits = new ArrayList<Character>();
+    private static Terminal terminal;
+
+    public static void init_terminal() {
+        if (terminal == null) {
+            try {
+                terminal = TerminalBuilder.builder().system(true).jna(false).build();
+                terminal.enterRawMode(); //turn off input buffering
+                terminal.writer().print("\u001B[?25l"); //hide cursor
+                terminal.flush();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to initialize terminal", e);
+            }
+        }
     }
     
-    public void set_score(int score){
-        this.score = score;
+    public static void move_cursor_print(Entity thing) {
+    // move cursor to (row, col) and print the text
+    terminal.writer().print(String.format("\u001B[%d;%dH%s", thing.get_ypos() + 1, thing.get_xpos() + 1, thing.get_color() + thing.get_appearance()));
+    terminal.flush();
     }
     
-    public void set_lives(int lives){
-        this.lives = lives;
+    public static void move_cursor_print(int x_pos, int y_pos, String text) {
+    // move cursor to (row, col) and print the text
+    terminal.writer().print(String.format("\u001B[%d;%dH%s", y_pos + 1, x_pos + 1, text));
+    terminal.flush();
     }
     
-    public void add_fruit(char fruit){
-        fruits.add(fruit);
+    public static void print_board(Board map){ 
+        for(int i = 0; i < 31; i++){
+            for(int j = 0; j < 55; j++){
+                if(map.board_at(j, i) == 'x' || map.board_at(j, i) == '/'){
+                    System.out.print(' ');   
+                } else if (map.board_at(j, i) == '⬤'){
+                    System.out.print("\u001b[33;1m⬤\u001b[38;5;18m");
+                } else if (map.board_at(j, i) == '●'){
+                    System.out.print("\u001b[0m●");
+                } else if (map.board_at(j, i) == 'p'){
+                    System.out.print("\u001b[0m▬");
+                /*} else if (map[i][j] == '✰'){
+                    System.out.print("\u001b[0m✰");*/
+                } else {
+                    System.out.print("\u001b[38;5;18m" + map.board_at(j, i));
+                }
+            }
+            System.out.print("\n");
+        }
+        System.out.print("\u001b[0m");
     }
     
-    public int get_score(){
-        return score;
+    public static void flush(){
+        terminal.flush();
     }
     
-    public int get_lives(){
-        return lives;
+    public static void close(){
+        try {
+            terminal.close();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize terminal", e);
+        }
     }
     
-    public char get_fruit(int index){
-        return fruits.get(index);
+    public static Terminal return_term(){
+        return terminal;
     }
 }
